@@ -5,6 +5,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { Contacts } from './interface/person.interface';
 import { ContactsService } from './services/contacts.service';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-contacts',
@@ -13,7 +14,8 @@ import { ContactsService } from './services/contacts.service';
     NzInputModule,
     FormsModule,
     NzButtonModule,
-    NzTableModule
+    NzTableModule,
+    NzModalModule
   ],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss'
@@ -21,6 +23,10 @@ import { ContactsService } from './services/contacts.service';
 export class ContactsComponent {
   value: string = '';
   listOfData: Contacts[] = [];
+  isVisible: boolean = true;
+  name: string = '';
+  phone: number | null = null;
+
 
   constructor(private _contactsServices: ContactsService) { }
 
@@ -32,6 +38,26 @@ export class ContactsComponent {
     this._contactsServices.getContacts().subscribe((contacts: Contacts[]) => {
       this.listOfData = contacts;
     })
+  }
+
+  openModal(): void {
+    this.isVisible = true;
+  }
+
+  handleOk() {
+    //Llamar al servidio
+    const payload = {
+      name: this.name,
+      phone: this.phone
+    }
+    
+    console.log(payload);
+    this.isVisible = false;
+  }
+
+  handleCancel() {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
   }
 
 }
